@@ -1,0 +1,10 @@
+[ignore]
+src/
+
+[include]
+[libs]
+[lints]
+
+[options]
+include_warnings=true
+module.use_strict=true

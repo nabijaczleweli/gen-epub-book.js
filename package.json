@@ -1,0 +1,37 @@
+{
+	"name": "epubify",
+	"version": "0.1.0",
+	"description": "Generate an ePub book from a simple plaintext descriptor.",
+	"keywords": ["generate", "ePub", "ebook", "e-book", "book"],
+	"author": "nabijaczleweli <nabijaczleweli@gmail.com> (https://nabijaczleweli.xyz)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/nabijaczleweli/gen-epub-book.js/issues",
+		"email": "nabijaczleweli@gmail.com"
+	},
+	"homepage": "https://github.com/nabijaczleweli/gen-epub-book.js",
+	"repository": "nabijaczleweli/gen-epub-book.js",
+
+	"main": "dist/lib.js",
+	"bin": "dist/main.js",
+	"man": "dist/man/gen-epub-book.js.1",
+
+	"scripts": {
+		"build": "flow && babel src/ -d dist/",
+		"run": "node dist/main.js",
+		"test": "mocha --compilers js:babel-core/register",
+		"doc": "jsdoc -c .jsdoc dist",
+		"man": "ronn --organization=\"gen-epub-book.js developers\" gen-epub-book.md && sh -c \"mkdir -p ./dist/man\" && mv gen-epub-book.1 dist/man/gen-epub-book.js.1 && mv gen-epub-book.1.html dist/man/gen-epub-book.js.1.html"
+	},
+
+	"dependencies": {},
+	"devDependencies": {
+		"jsdoc": "3.5",
+		"mocha": "3.5",
+		"flow-bin": "0.53",
+		"babel-cli": "6.26",
+		"ink-docstrap": "1.3",
+		"babel-preset-env": "1.5",
+		"babel-preset-flow": "6.23"
+	}
+}

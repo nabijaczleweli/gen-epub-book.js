@@ -1,0 +1,54 @@
+{
+	"build_systems":
+	[
+		{
+			"working_dir": "$project_path",
+			"shell_cmd": "npm run build && npm run test && make",
+			"name": "Build gen-epub-book.js and examples"
+		},
+		{
+			"working_dir": "$project_path",
+			"shell_cmd": "npm run build && npm run doc",
+			"name": "Document gen-epub-book.js"
+		}
+	],
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"name": "Source",
+			"path": "src"
+		},
+		{
+			"follow_symlinks": true,
+			"name": "Tests",
+			"path": "test"
+		},
+		{
+			"follow_symlinks": true,
+			"name": "Assets",
+			"path": "assets"
+		},
+		{
+			"follow_symlinks": true,
+			"name": "Examples",
+			"path": "examples"
+		},
+		{
+			"file_include_patterns":
+			[
+				"*Makefile*",
+				"*.yml",
+				"*.json",
+				".*"
+			],
+			"folder_exclude_patterns":
+			[
+				"*"
+			],
+			"follow_symlinks": true,
+			"name": "Build files",
+			"path": "."
+		}
+	]
+}
