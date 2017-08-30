@@ -25,19 +25,22 @@
 asset_dir="$1"
 shift
 
-temp_dir="$TMP"
-if [[ "$temp_dir" == "" ]]; then
-	temp_dir="$TEMP"
-	if [[ "$temp_dir" == "" ]]; then
-		temp_dir="/tmp"
+sys_temp="$TMP"
+if [[ "$sys_temp" == "" ]]; then
+	sys_temp="$TEMP"
+	if [[ "$sys_temp" == "" ]]; then
+		sys_temp="/tmp"
 	fi
 fi
 
-temp_file="$(mktemp -p $temp_dir gen-epub-book.js-process_includes.XXX)"
+temp_dir="$(mktemp -dp $sys_temp gen-epub-book.js-process_includes.XXXXXXXXXX)/"
+temp_file="${temp_dir}.log"
 echo > "$temp_file"
 
 for i in "$@"; do
-	gawk -i inplace '
+	mkdir -p "$(dirname "$temp_dir$i")"
+	cp "$i" "$temp_dir$i"
+	gawk '
 		# Based on https://www.gnu.org/software/gawk/manual/html_node/Readfile-Function.html
 		function readfile(fname) {
 			old_rs = RS
@@ -65,7 +68,7 @@ for i in "$@"; do
 		}
 
 		!/\$\${include\([^)]+\)}/
-	' "$i"
+	' "$temp_dir$i" > "$i"
 	sed -i 's/‌n‌/\\n\\\n/g' "$i"
 done
 
