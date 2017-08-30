@@ -31,7 +31,7 @@ import {Configuration} from "../src/config";
 
 
 const temp_dir = process.env["TMP"] || process.env["TEMP"] || "/tmp";
-const bad_lengths = [0, 1, 3, 4, 5, 6, 7, 8, 9, 10];
+const bad_lengths = [0, 1, 3, 4, 5, 6, 7, 8, 9];
 
 
 describe("config", () => {

@@ -27,21 +27,7 @@ const path = require("path");
 import {file_exists} from "./util";
 
 
-const HELP_TEXT = "\
-USAGE:\n\
-   gen-epub-book <input file> <output file>\n\
-\n\
-Where:\n\
-\n\
-   <input file>\n\
-     (required) File to parse, must exist\n\
-\n\
-   <output file>\n\
-     (required) File to write the book to\n\
-\n\
-epubify -- generate an ePub book from a simple plaintext descriptor\n\
-           https://nabijaczleweli.xyz/content/gen-epub-book\
-";
+const HELP_TEXT: string = "$${include(help.txt)}";
 
 
 /** A unified config. */
@@ -59,7 +45,7 @@ export class Configuration {
 	/** Parse commandline arguments.
 		*
 		* @param argv command-line argument array without executable nor script name.
-		* @param out where to print errors/help should any occur
+		* @param out `(Console)` where to print errors/help should any occur
 		*/
 	constructor(argv: string[], out = console) {
 		if(argv.length != 2 || !file_exists(argv[0])) {

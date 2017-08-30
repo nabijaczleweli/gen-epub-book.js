@@ -40,6 +40,7 @@
 				"*Makefile*",
 				"*.yml",
 				"*.json",
+				"*.sh",
 				".*"
 			],
 			"folder_exclude_patterns":

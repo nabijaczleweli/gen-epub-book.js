@@ -8,6 +8,7 @@
 !Cargo.toml
 !rustfmt.toml
 !package.json
+!process_includes.sh
 !LICENSE
 !src
 !src/**

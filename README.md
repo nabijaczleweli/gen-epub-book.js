@@ -9,7 +9,7 @@ Generate an ePub book from a simple plaintext descriptor.
 Install via:
 
 ```sh
-npm install epubify
+npm install -g epubify
 ```
 
 Copy this somewhere:

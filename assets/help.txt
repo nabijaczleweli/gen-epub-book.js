@@ -1,0 +1,13 @@
+USAGE:
+   gen-epub-book <input file> <output file>
+
+Where:
+
+   <input file>
+     (required) File to parse, must exist
+
+   <output file>
+     (required) File to write the book to
+
+epubify -- generate an ePub book from a simple plaintext descriptor
+           https://nabijaczleweli.xyz/content/gen-epub-book

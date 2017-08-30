@@ -17,7 +17,7 @@
 	"man": "dist/man/gen-epub-book.js.1",
 
 	"scripts": {
-		"build": "flow && babel src/ -d dist/",
+		"build": "flow && babel src/ -d dist/ && bash process_includes.sh assets/ dist/*.js",
 		"run": "node dist/main.js",
 		"test": "mocha --compilers js:babel-core/register",
 		"doc": "documentation build src/ -o dist/doc -f html",
