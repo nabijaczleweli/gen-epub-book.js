@@ -27,7 +27,7 @@ const path = require("path");
 import {file_exists} from "./util";
 
 
-const HELP_TEXT: string = "$${include(help.txt)}";
+const HELP_TEXT = "$${include(help.txt)}";
 
 
 /** A unified config. */

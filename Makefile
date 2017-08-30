@@ -23,8 +23,8 @@
 NPM := npm
 CALIBRE_CONVERT := ebook-convert
 
-OUTDIR := out/
 DSTDIR := dist/
+OUTDIR := $(DSTDIR)out/
 
 BOOK_SOURCES := $(sort $(wildcard examples/*.epupp examples/**/*.epupp examples/**/**/*.epupp examples/**/**/**/*.epupp))
 
