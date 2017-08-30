@@ -5,10 +5,11 @@
 !*Makefile
 !*.sublime-project
 !*.md
+!*.sh
 !Cargo.toml
 !rustfmt.toml
 !package.json
-!process_includes.sh
+!prepend_license.awk
 !LICENSE
 !src
 !src/**
