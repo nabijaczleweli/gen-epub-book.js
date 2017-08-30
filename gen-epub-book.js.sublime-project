@@ -8,7 +8,7 @@
 		},
 		{
 			"working_dir": "$project_path",
-			"shell_cmd": "npm run build && npm run doc",
+			"shell_cmd": "npm run doc",
 			"name": "Document gen-epub-book.js"
 		}
 	],

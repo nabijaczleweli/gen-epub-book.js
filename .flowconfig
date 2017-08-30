@@ -1,5 +1,5 @@
 [ignore]
-src/
+.*/node_modules/documentation/.*
 
 [include]
 [libs]

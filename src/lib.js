@@ -1,6 +1,3 @@
-// @flow
-
-
 // The MIT License (MIT)
 
 // Copyright (c) 2017 nabijaczleweli
@@ -22,10 +19,12 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+// @flow
 
-/** Parse specified file's content into a `Book` instance
+
+/** Parse specified file's content into a `Book` instance.
   *
-  * @param {string} contents - the contents of the specified file
+  * @param contents the content of the specified file
   */
 export function parse_file(contents: string): Object {
 	return {};

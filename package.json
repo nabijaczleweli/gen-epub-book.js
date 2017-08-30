@@ -20,18 +20,19 @@
 		"build": "flow && babel src/ -d dist/",
 		"run": "node dist/main.js",
 		"test": "mocha --compilers js:babel-core/register",
-		"doc": "jsdoc -c .jsdoc dist",
+		"doc": "documentation build src/ -o dist/doc -f html",
 		"man": "ronn --organization=\"gen-epub-book.js developers\" gen-epub-book.md && sh -c \"mkdir -p ./dist/man\" && mv gen-epub-book.1 dist/man/gen-epub-book.js.1 && mv gen-epub-book.1.html dist/man/gen-epub-book.js.1.html"
 	},
 
 	"dependencies": {},
 	"devDependencies": {
-		"jsdoc": "3.5",
 		"mocha": "3.5",
 		"flow-bin": "0.53",
 		"babel-cli": "6.26",
-		"ink-docstrap": "1.3",
+		"documentation": "5.2",
+		"stream-buffers": "3.0",
 		"babel-preset-env": "1.5",
-		"babel-preset-flow": "6.23"
+		"babel-preset-flow": "6.23",
+		"babel-preset-stage-0": "6.24"
 	}
 }

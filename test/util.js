@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+// @flow
 
 // The MIT License (MIT)
 
@@ -21,12 +21,31 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// @flow
+
+import {describe, it} from "mocha";
+const assert = require("assert");
+const fs = require("fs");
+
+import {file_exists} from "../src/util";
 
 
-import {Configuration} from "./config";
-const lib = require("./lib");
+const temp_dir = process.env["TMP"] || process.env["TEMP"] || "/tmp";
 
 
-const config = new Configuration(process.argv.slice(2));
-console.log("Assembling", config.in_file, "into", config.out_file);
+describe("util", () => {
+	describe("#file_exists()", () => {
+		it("correctly reports existing files", () => {
+			assert(file_exists(process.argv[0]));
+		});
+
+		it("correctly reports nonexistant files", (done) => {
+			fs.mkdtemp(temp_dir + "/gen-epub-book.js-", (err, folder) => {
+				if(err)
+					done(err);
+
+				assert(!file_exists(folder + "/nonexistant.file"));
+				done();
+			});
+		});
+	});
+});

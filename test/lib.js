@@ -23,15 +23,15 @@
 
 
 import {describe, it} from "mocha";
-let assert = require("assert");
+const assert = require("assert");
+
+import {parse_file} from "../src/lib";
 
 
-import {parse_file} from "../src/lib.js";
-
-describe("lib", function() {
-  describe("#parse_file()", function() {
-    it("always returns {}", function() {
-      assert.deepEqual(parse_file(""), {});
-    });
-  });
+describe("lib", () => {
+	describe("#parse_file()", () => {
+		it("always returns {}", () => {
+			assert.deepEqual(parse_file(""), {});
+		});
+	});
 });

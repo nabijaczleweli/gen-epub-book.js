@@ -2,7 +2,7 @@
 Generate an ePub book from a simple plaintext descriptor.
 
 ## [Manpage](https://cdn.rawgit.com/nabijaczleweli/gen-epub-book/man/gen-epub-book.js.1.html)
-## [Documentation](https://cdn.rawgit.com/nabijaczleweli/gen-epub-book.js/doc/gen_epub_book/index.html)
+## [Documentation](https://cdn.rawgit.com/nabijaczleweli/gen-epub-book.js/doc/index.html)
 
 ## Quickstart
 

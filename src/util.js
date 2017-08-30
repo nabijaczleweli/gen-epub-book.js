@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // The MIT License (MIT)
 
 // Copyright (c) 2017 nabijaczleweli
@@ -24,9 +22,18 @@
 // @flow
 
 
-import {Configuration} from "./config";
-const lib = require("./lib");
+const fs = require("fs");
 
 
-const config = new Configuration(process.argv.slice(2));
-console.log("Assembling", config.in_file, "into", config.out_file);
+/** Check whether a file with the specified path exists.
+  *
+  * @param path The file for whose existence to check.
+  */
+export function file_exists(path: string): boolean {
+	try {
+		fs.accessSync(path);
+		return true;
+	} catch(_) {
+		return false;
+	}
+}
