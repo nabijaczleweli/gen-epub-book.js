@@ -49,18 +49,8 @@ epubify -- generate an ePub book from a simple plaintext descriptor\n\
            https://nabijaczleweli.xyz/content/gen-epub-book\n\
 ";
 
-/** A unified config. */
-
 var Configuration =
 
-/** Parse commandline arguments.
-	*
-	* @param argv command-line argument array without executable nor script name.
-	* @param out `(Console)` where to print errors/help should any occur
-	*/
-
-
-/** The file to which output the resulting ePub. */
 exports.Configuration = function Configuration(argv) {
 	var out = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : console;
 
@@ -77,9 +67,6 @@ exports.Configuration = function Configuration(argv) {
 	this.rel_root = path.dirname(this.in_file);
 }
 
-/** Relative root for file paths. */
-
-/** The descriptor file to read from. */
 ;
 
 function print_help(err, out) {
@@ -115,10 +102,6 @@ exports.parse_file = parse_file;
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/** Parse specified file's content into a `Book` instance.
-  *
-  * @param contents the content of the specified file
-  */
 function parse_file(contents) {
   return {};
 }
@@ -153,10 +136,6 @@ exports.file_exists = file_exists;
 
 var fs = require("fs");
 
-/** Check whether a file with the specified path exists.
-  *
-  * @param path The file for whose existence to check.
-  */
 function file_exists(path) {
 	try {
 		fs.accessSync(path);
