@@ -30,8 +30,20 @@ import {parse_file} from "../src/lib";
 
 describe("lib", () => {
 	describe("#parse_file()", () => {
-		it("always returns {}", () => {
-			assert.deepEqual(parse_file(""), {});
-		});
+		/*it("always returns {}", () => {
+			assert.deepEqual(parse_file("\n\
+Name: Everything we got, in one thing\n\
+\n\
+Content: simple/ctnt.html\n\
+String-Content: <strong>SEIZE THE MEANS OF PRODUCTION!</strong>\n\
+Image-Content: simple/chapter_image.png\n\
+Network-Image-Content: https://cdn.rawgit.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png\n\
+\n\
+Network-Cover: http://i.imgur.com/ViQ2WED.jpg\n\
+\n\
+Author: nabijaczleweli\n\
+Date: 2017-02-08T15:30:18+01:00\n\
+Language: en-GB\n"), {});
+		});*/
 	});
 });

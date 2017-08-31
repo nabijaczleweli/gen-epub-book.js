@@ -22,23 +22,26 @@
 // @flow
 
 
-const fs = require("fs");
+import Moment from "moment";
 
 
-/** Format string to parse RFC3339 with `moment`. */
-export const RFC3339_FORMAT: string = "YYYY-MM-DDTHH:mm:ssZ";
+export type ContentType = "local" | "remote" | "string";
+
+export type Content = {
+	id: string;
+	packed_path: string;
+	data: string;
+	type: ContentType;
+};
 
 
-/** Check whether a file with the specified path exists.
-  *
-  * @param path The file for whose existence to check.
-  * @return Whether the specified file exists.
-  */
-export function file_exists(path: string): boolean {
-	try {
-		fs.accessSync(path);
-		return true;
-	} catch(_) {
-		return false;
-	}
+export class Book {
+	uuid: string;
+	name: string;
+	author: string;
+	date: Moment;
+	language: Object;
+
+	contents: Content[];
+	additives: Content[];
 }

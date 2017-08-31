@@ -1,8 +1,9 @@
-# [gen-epub-book](https://nabijaczleweli.xyz/content/gen-epub-book).js [![Build Status](https://travis-ci.org/nabijaczleweli/gen-epub-book.js.svg?branch=master)](https://travis-ci.org/nabijaczleweli/gen-epub-book.js) [![Licence](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+# [gen-epub-book](https://nabijaczleweli.xyz/content/gen-epub-book).js [![Build Status](https://travis-ci.org/nabijaczleweli/gen-epub-book.js.svg?branch=master)](https://travis-ci.org/nabijaczleweli/gen-epub-book.js) [![Licence](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![npm version](https://badge.fury.io/js/epubify.svg)](https://www.npmjs.com/package/epubify)
 Generate an ePub book from a simple plaintext descriptor.
 
 ## [Manpage](https://cdn.rawgit.com/nabijaczleweli/gen-epub-book/man/gen-epub-book.js.1.html)
 ## [Documentation](https://cdn.rawgit.com/nabijaczleweli/gen-epub-book.js/doc/index.html)
+## [Browserified bundles](https://github.com/nabijaczleweli/gen-epub-book.js/tree/bundle)
 
 ## Quickstart
 
