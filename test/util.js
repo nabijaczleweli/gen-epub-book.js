@@ -22,12 +22,13 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+import {URL} from "url";
 import {describe, it} from "mocha";
 const assert = require("assert");
 const moment = require("moment");
 const fs = require("fs");
 
-import {RFC3339_FORMAT, file_exists} from "../src/util";
+import {RFC3339_FORMAT, image_content_string, file_packed_path, url_packed_path, string_content, file_exists, url_id, file_id} from "../src/util";
 
 
 const temp_dir = process.env["TMP"] || process.env["TEMP"] || "/tmp";
@@ -62,6 +63,72 @@ describe("util", () => {
 				assert(!file_exists(folder + "/nonexistant.file"));
 				done();
 			});
+		});
+	});
+
+	describe("#string_content()", () => {
+		it("contains specified content", () => {
+			assert(string_content(process.argv[0]).includes(process.argv[0]));
+		});
+	});
+
+	describe("#image_content_string()", () => {
+		it("is as expected", () => {
+			assert.equal(image_content_string("henlo.html"), "<img href=\"henlo.html\" alt=\"henlo.html\"></img>");
+		});
+	});
+
+	describe("#file_id()", () => {
+		it("correctly processes slashes and extensions", () => {
+			assert.equal(file_id("simple/chapter_image.png"), "simple-chapter_image_png");
+			assert.equal(file_id("simple\\ctnt.html"), "simple-ctnt_html");
+		});
+
+		it("correctly strips ./s and ../s", () => {
+			assert.equal(file_id("../cover.png"), "cover_png");
+			assert.equal(file_id("relative/path/../green_ass_dog.html"), "relative-path-green_ass_dog_html");
+			assert.equal(file_id("./../relative_path_fuckery\\relative/../relative/path\\../../relative/path/dead_santa.html"),
+			             "relative_path_fuckery-relative-relative-path-relative-path-dead_santa_html");
+			assert.equal(file_id("../cover"), "cover");
+		});
+	});
+
+	describe("#file_packed_path()", () => {
+		it("correctly processes slashes", () => {
+			assert.equal(file_packed_path("simple/chapter_image.png"), "simple-chapter_image.png");
+			assert.equal(file_packed_path("simple\\ctnt.html"), "simple-ctnt.html");
+		});
+
+		it("correctly strips ./s and ../s", () => {
+			assert.equal(file_packed_path("../cover.png"), "cover.png");
+			assert.equal(file_packed_path("relative/path/../green_ass_dog.html"), "relative-path-green_ass_dog.html");
+			assert.equal(file_packed_path("./../relative_path_fuckery\\relative/../relative/path\\../../relative/path/dead_santa.html"),
+			             "relative_path_fuckery-relative-relative-path-relative-path-dead_santa.html");
+			assert.equal(file_packed_path("../cover"), "cover");
+		});
+	});
+
+	describe("#url_id()", () => {
+		it("picks last segment and correctly processes extensions", () => {
+			assert.equal(url_id(new URL("http://i.imgur.com/ViQ2WED.jpg")), "ViQ2WED_jpg");
+			assert.equal(url_id(new URL("https://cdn.rawgit.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png")),
+			             "slim_shady_png");
+			assert.equal(url_id(new URL("https://img09.deviantart.net/e6c8/i/2015/138/8/0/the_pursuer_by_artsed-d7lbiua.jpg")),
+			             "the_pursuer_by_artsed-d7lbiua_jpg");
+			assert.equal(url_id(new URL("https://i.imgur.com/")), "");
+			assert.equal(url_id(new URL("https://i.imgur.com/.png")), "_png");
+		});
+	});
+
+	describe("#url_packed_path()", () => {
+		it("picks last segment and correctly processes extensions", () => {
+			assert.equal(url_packed_path(new URL("http://i.imgur.com/ViQ2WED.jpg")), "ViQ2WED.jpg");
+			assert.equal(url_packed_path(new URL("https://cdn.rawgit.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png")),
+			             "slim_shady.png");
+			assert.equal(url_packed_path(new URL("https://img09.deviantart.net/e6c8/i/2015/138/8/0/the_pursuer_by_artsed-d7lbiua.jpg")),
+				           "the_pursuer_by_artsed-d7lbiua.jpg");
+			assert.equal(url_packed_path(new URL("https://i.imgur.com/")), "");
+			assert.equal(url_packed_path(new URL("https://i.imgur.com/.png")), ".png");
 		});
 	});
 });

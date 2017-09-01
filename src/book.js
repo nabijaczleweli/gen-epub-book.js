@@ -23,6 +23,7 @@
 
 
 import Moment from "moment";
+import type {URL} from "url";
 
 
 export type ContentType = "local" | "remote" | "string";
@@ -30,7 +31,7 @@ export type ContentType = "local" | "remote" | "string";
 export type Content = {
 	id: string;
 	packed_path: string;
-	data: string;
+	data: string | URL;
 	type: ContentType;
 };
 
@@ -42,6 +43,7 @@ export class Book {
 	date: Moment;
 	language: Object;
 
+	cover: ?Content;
 	contents: Content[];
 	additives: Content[];
 }

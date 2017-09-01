@@ -22,6 +22,7 @@
 // @flow
 
 
+import type {URL} from "url";
 const fs = require("fs");
 
 
@@ -41,4 +42,60 @@ export function file_exists(path: string): boolean {
 	} catch(_) {
 		return false;
 	}
+}
+
+/** Get content of string-content, having provided the content of that string-content (yes).
+  *
+  * @param content String data of that string content.
+  * @return String content to include in e-book.
+  */
+export function string_content(content: string): string {
+	return "$${include(string_content_header.html)}\t" +  //
+	       content +                                      //
+	       "$${include(string_content_footer.html)}";
+}
+
+/** Get img filler for image-content.
+  *
+  * @param img_path Packed path of image.
+  * @return Stringified &lt;img&gt; tag.
+  */
+export function image_content_string(img_path: string): string {
+	return `<img href="${img_path}" alt="${img_path}"></img>`;
+}
+
+/** Get e-book ID for the specified relative path.
+  *
+  * @param file_path Pathname specified in `"Content"` key.
+  * @return E-book ID to use for content.
+  */
+export function file_id(file_path: string): string {
+	return file_packed_path(file_path).replace(/\./g, "_");
+}
+
+/** Get packed e-book path for the specified relative path.
+  *
+  * @param file_path Pathname specified in `"Content"` key.
+  * @return E-book path to use for content.
+  */
+export function file_packed_path(file_path: string): string {
+	return file_path.replace(/\\/g, "/").replace(/\.\.\//g, "").replace(/\.\//g, "").replace(/\//g, "-");
+}
+
+/** Get e-book ID for the specified URL.
+  *
+  * @param file_path Pathname specified in `"Remote-*"` key.
+  * @return E-book ID to use for content.
+  */
+export function url_id(url: URL): string {
+	return url_packed_path(url).replace(/\./g, "_");
+}
+
+/** Get packed e-book path for the specified URL.
+  *
+  * @param url Pathname specified in `"Remote-*"` key.
+  * @return E-book path to use for content.
+  */
+export function url_packed_path(url: URL): string {
+	return file_packed_path(url.pathname.substr(url.pathname.lastIndexOf("/") + 1));
 }

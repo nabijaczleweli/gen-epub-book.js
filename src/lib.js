@@ -22,59 +22,167 @@
 // @flow
 
 
-import {Configuration} from "./config";
-import {Book} from "./book";
-const util = require("./util");
+export const util = require("./util");
+export const book = require("./book");
+export const Configuration = require("./config").Configuration;
 
 import Moment from "moment";
+import {URL} from "url";
 const strsplit = require("strsplit");
 const uuid_v4 = require("uuid/v4");
 const moment = require("moment");
 const bcp47 = require("bcp-47");
 const trim = require("trim");
-
-exports["util"] = util;
-exports["Book"] = Book;
-exports["Configuration"] = Configuration;
+const path = require("path");
 
 
+/** Generic book parsing error. */
 export class BookError extends Error {}
 
 
 /** Parse specified file's content into a `Book` instance.
   *
-  * @param contents the content of the specified file
+  * @param string_contents the content of the specified file
   */
-export function parse_file(contents: string): Book {
+export function parse_descriptor(string_contents: string, relative_root: string): book.Book {
 	let name: ?string = null;
 	let author: ?string = null;
 	let date: ?Moment = null;
 	let language: ?Object = null;
+	let cover: ?book.Content = null;
+	let contents: book.Content[] = [];
+	let additives: book.Content[] = [];
 
-	strsplit(contents, "\n").forEach(line => {
+	strsplit(string_contents, "\n").forEach((line, idx) => {
 		let kv = strsplit(line, ':', 2);
 		if(kv.length < 2)
 			return;
 
-		let [key, value]: [string, string] = kv;
+		let [key, value]: [string, string] = kv.map(trim);
+		let rel_path: string = path.posix.join(relative_root, value);
 		switch(key) {
 			case "Name":
 				name = dedup_field(name, value, "Name");
 				break;
+
 			case "Author":
 				author = dedup_field(author, value, "Author");
 				break;
+
 			case "Date":
 				date = dedup_field(date, moment(value, util.RFC3339_FORMAT), "Date");
 				if(!date.isValid())
 					throw new BookError(`Date value "${value}" not valid RFC3339`);
 				break;
+
 			case "Language":
-				language = dedup_field(language, bcp47.parse(value), "Language");
-				if(Object.keys(language).length === 0)
-					throw new BookError(`Language value "${value}" not valid BCP47`);
+				language = dedup_field(language, bcp47.parse(value, {warning: (reason: string, code: number, offset: number) => {
+					throw new BookError(`Language value "${value}" not valid BCP47: ${reason} at position ${offset}`);
+				}}), "Language");
 				break;
-			// TODO: *-Content, *-Include
+
+			case "Content":
+				if(!util.file_exists(rel_path))
+					throw new BookError(`Content path "${rel_path}" nonexistant`);
+				contents.push({
+					id: util.file_id(value),
+					packed_path: util.file_packed_path(value),
+					data: rel_path,
+					type: "local",
+				});
+				break;
+
+			case "String-Content":
+				contents.push({
+					id: `string-content-${idx}_html`,
+					packed_path: `string-content-${idx}.html`,
+					data: util.string_content(value),
+					type: "string",
+				});
+				break;
+
+			case "Network-Image-Content": {
+				let url = new URL(value);
+				let packed_path = util.url_packed_path(url);
+				additives.push({
+					id: util.url_id(url),
+					packed_path: packed_path,
+					data: url,
+					type: "remote",
+				});
+				contents.push({
+					id: `network-image-content-${idx}_html`,
+					packed_path: `network-image-content-${idx}.html`,
+					data: util.string_content(util.image_content_string(packed_path)),
+					type: "string",
+				});
+			} break;
+
+			case "Cover": {
+				if(!util.file_exists(rel_path))
+					throw new BookError(`Cover path "${rel_path}" nonexistant`);
+				let packed_path = util.file_packed_path(value);
+				cover = dedup_field(cover, {
+					id: "cover-content_html",
+					packed_path: 'cover-content.html',
+					data: util.string_content(util.image_content_string(packed_path)),
+					type: "string",
+				}, "Cover or Network-Cover");
+				additives.push({
+					id: util.file_id(value),
+					packed_path: packed_path,
+					data: rel_path,
+					type: "local",
+				});
+			} break;
+
+			case "Network-Cover": {
+				let url = new URL(value);
+				let packed_path = util.url_packed_path(url);
+				cover = dedup_field(cover, {
+					id: "network-cover-content_html",
+					packed_path: 'network-cover-content.html',
+					data: util.string_content(util.image_content_string(packed_path)),
+					type: "string",
+				}, "Cover or Network-Cover");
+				additives.push({
+					id: util.url_id(url),
+					packed_path: packed_path,
+					data: value,
+					type: "local",
+				});
+			} break;
+
+			case "Include":
+				if(!util.file_exists(rel_path))
+					throw new BookError(`Include path "${rel_path}" nonexistant`);
+				additives.push({
+					id: util.file_id(value),
+					packed_path: util.file_packed_path(value),
+					data: rel_path,
+					type: "local",
+				});
+				break;
+
+			case "Network-Include": {
+				let url = new URL(value);
+				additives.push({
+					id: util.url_id(url),
+					packed_path: util.url_packed_path(url),
+					data: value,
+					type: "local",
+				});
+			} break;
+
+			case "Network-Include": {
+				let url = new URL(value);
+				additives.push({
+					id: util.url_id(url),
+					packed_path: util.url_packed_path(url),
+					data: value,
+					type: "local",
+				});
+			} break;
 		}
 	});
 
@@ -90,8 +198,9 @@ export function parse_file(contents: string): Book {
 		date: date,
 		language: language,
 
-		contents: [],
-		additives: [],
+		cover: cover,
+		contents: contents,
+		additives: additives,
 	};
 }
 
