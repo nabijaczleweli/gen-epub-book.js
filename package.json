@@ -21,7 +21,6 @@
 		"run": "node dist/main.js",
 		"test": "mocha --compilers js:babel-core/register",
 		"bundle": "sh -c \"mkdir -p dist/bundle && browserify -u dist/main.js dist/*.js -o dist/bundle/epubify.js\" && uglifyjs --source-map -o dist/bundle/epubify.min.js -- dist/bundle/epubify.js && awk -f prepend_license.awk LICENSE > dist/bundle/epubify.min.js.tmp && mv dist/bundle/epubify.min.js.tmp dist/bundle/epubify.min.js",
-		"doc": "documentation build src/lib.js -o dist/doc -f html",
 		"man": "ronn --organization=\"gen-epub-book.js developers\" gen-epub-book.md && sh -c \"mkdir -p ./dist/man\" && mv gen-epub-book.1 dist/man/gen-epub-book.js.1 && mv gen-epub-book.1.html dist/man/gen-epub-book.js.1.html"
 	},
 
@@ -42,7 +41,6 @@
 		"uglify-js": "3.0",
 		"babel-cli": "6.26",
 		"browserify": "14.4",
-		"documentation": "5.2",
 		"stream-buffers": "3.0",
 		"babel-preset-env": "1.5",
 		"babel-preset-flow": "6.23",

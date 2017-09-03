@@ -30,7 +30,7 @@ const fs = require("fs");
 /** Format string to parse RFC3339 with `moment`. */
 export const RFC3339_FORMAT: string = "YYYY-MM-DDTHH:mm:ssZ";
 
-/** Regex for extract chapter titles. */
+/** Regex for extracting chapter titles. */
 export const CHAPTER_TITLE_REGEX: RegExp = /<!-- ePub title: "([^"]+)" -->/;
 
 

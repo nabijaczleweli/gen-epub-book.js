@@ -17,7 +17,6 @@ matrix:
   include:
     - env: LANGUAGE=Flow     DEPLOY_FILE="$TRAVIS_BUILD_DIR/../gen-epub-book.js-$TRAVIS_TAG.tbz2"
     - env: LANGUAGE=Flow-man DEPLOY_FILE="$TRAVIS_BUILD_DIR/../gen-epub-book.js-man-$TRAVIS_TAG.tbz2"
-    - env: LANGUAGE=Flow-doc DEPLOY_FILE="$TRAVIS_BUILD_DIR/../gen-epub-book.js-doc-$TRAVIS_TAG.tbz2"
 
 before_install:
   - if [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
@@ -62,7 +61,7 @@ after_success:
         echo "Update bundle $GEB_VERSION for commits $TRAVIS_COMMIT_RANGE";
         echo;
         git log "$TRAVIS_COMMIT_RANGE" --pretty=oneline;
-      ) >> "$TRAVIS_BUILD_DIR/../DOC_UPDATE_MSG";
+      ) >> "$TRAVIS_BUILD_DIR/../BUNDLE_UPDATE_MSG";
       mkdir -p ~/.ssh && cp gh_rsa ~/.ssh/id_rsa && chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa;
       git clone -b bundle "git@github.com:$TRAVIS_REPO_SLUG.git" "$TRAVIS_BUILD_DIR-bundle";
       rm -rf "$TRAVIS_BUILD_DIR-bundle/$GEB_VERSION";
@@ -73,34 +72,8 @@ after_success:
       git config --global user.name "Nabijaczleweli Autouploader Bot";
       git config --global push.default simple;
       git add -- *;
-      git commit -F "$TRAVIS_BUILD_DIR/../DOC_UPDATE_MSG";
+      git commit -F "$TRAVIS_BUILD_DIR/../BUNDLE_UPDATE_MSG";
       git push;
-      popd;
-    fi
-  - if [ "$LANGUAGE" == "Flow-doc" ] && [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_SECURE_ENV_VARS" = "true" ] && [ "$TRAVIS_COMMIT_RANGE" ] && ! [ "$TRAVIS_TAG" ]; then
-      (
-        echo "Update docs for commits $TRAVIS_COMMIT_RANGE";
-        echo;
-        git log "$TRAVIS_COMMIT_RANGE" --pretty=oneline;
-      ) >> "$TRAVIS_BUILD_DIR/../DOC_UPDATE_MSG";
-      mkdir -p ~/.ssh && cp gh_rsa ~/.ssh/id_rsa && chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa;
-      git clone -b doc "git@github.com:$TRAVIS_REPO_SLUG.git" "$TRAVIS_BUILD_DIR-doc";
-      npm run doc;
-      cp -rf dist/doc/* "$TRAVIS_BUILD_DIR-doc";
-      pushd "$TRAVIS_BUILD_DIR-doc";
-      git config --global user.email "nabijaczleweli@gmail.com";
-      git config --global user.name "Nabijaczleweli Autouploader Bot";
-      git config --global push.default simple;
-      git add -- *;
-      git commit -F "$TRAVIS_BUILD_DIR/../DOC_UPDATE_MSG";
-      git push;
-      popd;
-    fi
-  - if [ "$LANGUAGE" == "Flow-doc" ] && [ "$TRAVIS_TAG" ] && [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
-      cp -r dist/doc "$TRAVIS_BUILD_DIR/../gen-epub-book.js-doc-$TRAVIS_TAG";
-      pushd "$TRAVIS_BUILD_DIR/..";
-      tar -caf "gen-epub-book.js-doc-$TRAVIS_TAG.tbz2" "gen-epub-book.js-doc-$TRAVIS_TAG";
-      rm -rf "gen-epub-book.js-doc-$TRAVIS_TAG";
       popd;
     fi
   - if [ "$LANGUAGE" == "Flow-man" ] && [ "$TRAVIS_SECURE_ENV_VARS" == "true" ] && [ "$TRAVIS_COMMIT_RANGE" ] && ! [ "$TRAVIS_TAG" ]; then
