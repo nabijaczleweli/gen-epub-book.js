@@ -31,7 +31,9 @@ const fs = require("fs");
 
 
 const config = new epubify.Configuration(process.argv.slice(2));
-console.log(mkdirp.sync(path.dirname(config.out_file)));
+if(process.exitCode)
+	process.exit();
+mkdirp.sync(path.dirname(config.out_file));
 
 const content = fs.readFileSync(config.in_file, {encoding: "utf8"});
 const built = epubify.parse_descriptor(content, config.rel_root);
