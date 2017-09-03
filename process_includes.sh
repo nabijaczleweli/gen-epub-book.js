@@ -55,7 +55,7 @@ for i in "$@"; do
 
 		function escape(s) {
 			# Note the ZWNJ, awk has trouble processing \\n or any variant thereof
-			return gensub(/\n/, "‌n‌", "g", gensub(/"/, "\\\"", "g", s));
+			return gensub(/\n/, "‌n‌", "g", gensub("\"", "‌\"‌", "g", s));
 		}
 
 
@@ -69,7 +69,7 @@ for i in "$@"; do
 
 		!/\$\${include\([^)]+\)}/
 	' "$temp_dir$i" > "$i"
-	sed -i 's/‌n‌/\\n\\\n/g' "$i"
+	sed -i -e 's/‌n‌/\\n\\\n/g' -e 's/‌"‌/\\"/g' "$i"
 done
 
 cat "$temp_file"

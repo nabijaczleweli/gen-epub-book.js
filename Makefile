@@ -43,6 +43,14 @@ $(OUTDIR)%.mobi : $(OUTDIR)%.epub
 	@mkdir -p $(dir $@)
 	$(CALIBRE_CONVERT) "$^" "$@"
 
+$(OUTDIR)%.pdf : $(OUTDIR)%.epub
+	@mkdir -p $(dir $@)
+	$(CALIBRE_CONVERT) "$^" "$@"
+
+$(OUTDIR)%.azw3 : $(OUTDIR)%.epub
+	@mkdir -p $(dir $@)
+	$(CALIBRE_CONVERT) "$^" "$@"
+
 $(OUTDIR)%.epub : $(DSTDIR)main.js examples/%.epupp
 	@mkdir -p $(dir $@)
 	@$< "$(filter-out $<,$^)" "$@"

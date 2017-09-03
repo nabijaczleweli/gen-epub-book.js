@@ -28,9 +28,13 @@
 	"dependencies": {
 		"uuid": "3.1",
 		"trim": "0.0",
+		"jszip": "3.1",
 		"bcp-47": "1.0",
+		"mkdirp": "0.5",
 		"moment": "2.18",
-		"strsplit": "1.0"
+		"request": "2.81",
+		"strsplit": "1.0",
+		"mime-types": "2.1"
 	},
 	"devDependencies": {
 		"mocha": "3.5",

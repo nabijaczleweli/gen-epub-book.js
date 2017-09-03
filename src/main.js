@@ -24,15 +24,20 @@
 // @flow
 
 
-import {Configuration} from "./config";
-const lib = require("./lib");
-
+const epubify = require("./lib");
+const mkdirp = require("mkdirp");
+const path = require("path");
 const fs = require("fs");
 
 
-const config = new Configuration(process.argv.slice(2));
-console.log("Assembling", config.in_file, "into", config.out_file);
+const config = new epubify.Configuration(process.argv.slice(2));
+console.log(mkdirp.sync(path.dirname(config.out_file)));
 
 const content = fs.readFileSync(config.in_file, {encoding: "utf8"});
-const built = lib.parse_descriptor(content, config.rel_root);
-console.log(built);
+const built = epubify.parse_descriptor(content, config.rel_root);
+epubify.pack_book(built).generateNodeStream({
+	compression: "DEFLATE",
+	compressionOptions: {
+		level: 9
+	}
+}).pipe(fs.createWriteStream(config.out_file));

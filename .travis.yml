@@ -45,7 +45,7 @@ install:
 script:
   - if [ "$LANGUAGE" == "Flow" ]; then npm run build; fi
   - if [ "$LANGUAGE" == "Flow" ]; then npm run test; fi
-#  - if [ "$LANGUAGE" == "Flow" ]; then make; fi
+  - if [ "$LANGUAGE" == "Flow" ]; then make; fi
 
 after_success:
   - if [ "$LANGUAGE" == "Flow" ] && [ "$TRAVIS_TAG" ]; then

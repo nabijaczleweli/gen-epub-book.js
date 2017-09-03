@@ -8,3 +8,4 @@
 [options]
 include_warnings=true
 module.use_strict=true
+suppress_comment=.*Flow: please don't make this harder than it already is, thanks

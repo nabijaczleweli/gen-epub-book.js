@@ -23,11 +23,15 @@
 
 
 import type {URL} from "url";
+const mime_types = require('mime-types')
 const fs = require("fs");
 
 
 /** Format string to parse RFC3339 with `moment`. */
 export const RFC3339_FORMAT: string = "YYYY-MM-DDTHH:mm:ssZ";
+
+/** Regex for extract chapter titles. */
+export const CHAPTER_TITLE_REGEX: RegExp = /<!-- ePub title: "([^"]+)" -->/;
 
 
 /** Check whether a file with the specified path exists.
@@ -50,9 +54,9 @@ export function file_exists(path: string): boolean {
   * @return String content to include in e-book.
   */
 export function string_content(content: string): string {
-	return "$${include(string_content_header.html)}\t" +  //
-	       content +                                      //
-	       "$${include(string_content_footer.html)}";
+	return "$${include(string_content.html.head)}" +  //
+	       "\t\t" + content +                         //
+	       "$${include(string_content.html.tail)}";
 }
 
 /** Get img filler for image-content.
@@ -97,5 +101,17 @@ export function url_id(url: URL): string {
   * @return E-book path to use for content.
   */
 export function url_packed_path(url: URL): string {
-	return file_packed_path(url.pathname.substr(url.pathname.lastIndexOf("/") + 1));
+  return file_packed_path(url.pathname.substr(url.pathname.lastIndexOf("/") + 1));
+}
+
+/** Get MIME-type for the specified MIME type.
+  *
+  * @param pathname File to get MIME type for.
+  * @return MIME type for that file.
+  */
+export function get_mime_for(pathname: string): string {
+  let mt = mime_types.lookup(pathname);
+  if(mt === "text/html")
+    mt = "application/xhtml+xml";
+  return mt || "text/plain";
 }

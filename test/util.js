@@ -28,7 +28,8 @@ const assert = require("assert");
 const moment = require("moment");
 const fs = require("fs");
 
-import {RFC3339_FORMAT, image_content_string, file_packed_path, url_packed_path, string_content, file_exists, url_id, file_id} from "../src/util";
+import {RFC3339_FORMAT, image_content_string, file_packed_path, url_packed_path, string_content, get_mime_for, file_exists, url_id, file_id}
+	from "../src/util";
 
 
 const temp_dir = process.env["TMP"] || process.env["TEMP"] || "/tmp";
@@ -129,6 +130,22 @@ describe("util", () => {
 				           "the_pursuer_by_artsed-d7lbiua.jpg");
 			assert.equal(url_packed_path(new URL("https://i.imgur.com/")), "");
 			assert.equal(url_packed_path(new URL("https://i.imgur.com/.png")), ".png");
+		});
+	});
+
+	describe("#get_mime_for()", () => {
+		it("correctly resolves normal files", () => {
+			assert.equal(get_mime_for("slim_shady.png"), "image/png");
+			assert.equal(get_mime_for("index.js"), "application/javascript");
+		});
+
+		it("correctly handles unknown files", () => {
+			assert.equal(get_mime_for(".htaccess"), "text/plain");
+			assert.equal(get_mime_for("henlo.you-stinky-birb"), "text/plain");
+		});
+
+		it("correctly overrides html", () => {
+			assert.equal(get_mime_for("ctnt.html"), "application/xhtml+xml");
 		});
 	});
 });
