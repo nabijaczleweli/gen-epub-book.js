@@ -1,6 +1,6 @@
 {
 	"name": "epubify",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Generate an ePub book from a simple plaintext descriptor.",
 	"keywords": ["generate", "ePub", "ebook", "e-book", "book"],
 	"author": "nabijaczleweli <nabijaczleweli@gmail.com> (https://nabijaczleweli.xyz)",
