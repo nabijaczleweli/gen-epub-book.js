@@ -187,3 +187,11 @@ Type: [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
 Relative root for file paths.
 
 Type: [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Configuration.separator
+
+[Separator](http://192.168.1.109:8001/content/gen-epub-book/programmer.html#getting-the-gist) for *keys/values*.
+
+Default: `":"`.
+
+Type: [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)

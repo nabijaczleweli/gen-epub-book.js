@@ -43,6 +43,12 @@ export class Configuration {
 	/** Relative root for file paths. */
 	rel_root: string;
 
+	/** [Separator](http://192.168.1.109:8001/content/gen-epub-book/programmer.html#getting-the-gist) for keys/values.
+	  *
+	  * Default: `":"`.
+	  */
+	separator: string;
+
 
 	/** Parse commandline arguments.
 		*
@@ -51,6 +57,7 @@ export class Configuration {
 		*/
 	constructor(argv: string[], out = console) {
 		let pargv = minimist(argv, {
+			string: ["separator"],
 			boolean: ["version", "help"],
 			alias: {
 				v: "version",
@@ -79,6 +86,7 @@ export class Configuration {
 		this.in_file = pargv._[0];
 		this.out_file = pargv._[1];
 		this.rel_root = path.dirname(this.in_file);
+		this.separator = pargv.separator || ":";
 	}
 }
 

@@ -3,7 +3,7 @@ gen-epub-book.js(1) -- Generate an ePub book from a simple plaintext descriptor
 
 ## SYNOPSIS
 
-`gen-epub-book` IN_FILE OUT_FILE
+`gen-epub-book` IN_FILE OUT_FILE [OPTIONS]
 
 ## DESCRIPTION
 
@@ -18,6 +18,12 @@ Generate an ePub book from a simple plaintext descriptor.
   OUT_FILE
 
     File to write the book to, parent directory needn't exist.
+
+  --separator <SEP>
+
+    Use SEP as key/value separator.
+
+    Default: ":"
 
 ## DESCRIPTOR FORMAT
 

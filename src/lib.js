@@ -47,7 +47,7 @@ export class BookError extends Error {}
   *
   * @param string_contents the content of the specified file
   */
-export function parse_descriptor(string_contents: string, relative_root: string): book.Book {
+export function parse_descriptor(string_contents: string, relative_root: string, separator: string = ":"): book.Book {
 	let name: ?string = null;
 	let author: ?string = null;
 	let date: ?Moment = null;
@@ -57,7 +57,8 @@ export function parse_descriptor(string_contents: string, relative_root: string)
 	let additives: book.Content[] = [];
 
 	strsplit(string_contents, "\n").forEach((line, idx) => {
-		let kv = strsplit(line, ':', 2);
+		console.log(separator);
+		let kv = strsplit(line, separator, 2);
 		if(kv.length < 2)
 			return;
 
