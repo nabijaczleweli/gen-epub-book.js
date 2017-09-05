@@ -49,6 +49,12 @@ export class Configuration {
 	  */
 	separator: string;
 
+	/** Whether to try to parse non-RFC3339 date formats.
+	  *
+	  * Default: false.
+	  */
+	free_date: string;
+
 
 	/** Parse commandline arguments.
 		*
@@ -58,10 +64,12 @@ export class Configuration {
 	constructor(argv: string[], out = console) {
 		let pargv = minimist(argv, {
 			string: ["separator"],
-			boolean: ["version", "help"],
+			boolean: ["version", "help", "free-date"],
 			alias: {
 				v: "version",
 				h: "help",
+				S: "separator",
+				D: "free-date",
 			}
 		});
 
@@ -87,6 +95,7 @@ export class Configuration {
 		this.out_file = pargv._[1];
 		this.rel_root = path.dirname(this.in_file);
 		this.separator = pargv.separator || ":";
+		this.free_date = pargv["free-date"];
 	}
 }
 

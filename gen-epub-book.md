@@ -19,11 +19,17 @@ Generate an ePub book from a simple plaintext descriptor.
 
     File to write the book to, parent directory needn't exist.
 
-  --separator <SEP>
+  -S --separator <SEP>
 
     Use SEP as key/value separator.
 
     Default: ":"
+
+  -D --free-date
+
+    Try to parse non-RFC3339 date formats.
+
+    Default: don't.
 
 ## DESCRIPTOR FORMAT
 
@@ -131,6 +137,18 @@ This will, on e-book readers, allow users to jump directly to the content
 represented by the document containing this entry.
 
 Optional.
+
+## FREE DATE FORMAT FEATURE
+
+With the -D/--free-date flag, you can enable the free date format feature:
+&lt;<https://nabijaczleweli.xyz/content/gen-epub-book/programmer.html#features-free-date-format>&gt;.
+
+The supported formats therewith are therefore:
+
+  * RFC3339 (e.g. "2017-02-08T15:30:18+01:00"),
+  * RFC2822 (e.g. "Wed, 08 Feb 2017 15:30:18 +0100"),
+  * [known ISO8601 formats](http://momentjs.com/docs/#/parsing/string),
+  * [some more, browser-dependent](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse).
 
 ## AUTHOR
 

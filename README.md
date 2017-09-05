@@ -195,3 +195,11 @@ Type: [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
 Default: `":"`.
 
 Type: [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+##### Configuration.free_date
+
+Whether to try to parse non-RFC3339 date formats.
+
+Default: `false`.
+
+Type: [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)

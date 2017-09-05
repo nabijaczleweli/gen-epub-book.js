@@ -47,7 +47,7 @@ export class BookError extends Error {}
   *
   * @param string_contents the content of the specified file
   */
-export function parse_descriptor(string_contents: string, relative_root: string, separator: string = ":"): book.Book {
+export function parse_descriptor(string_contents: string, relative_root: string, separator: string = ":", free_date: boolean = false): book.Book {
 	let name: ?string = null;
 	let author: ?string = null;
 	let date: ?Moment = null;
@@ -57,7 +57,6 @@ export function parse_descriptor(string_contents: string, relative_root: string,
 	let additives: book.Content[] = [];
 
 	strsplit(string_contents, "\n").forEach((line, idx) => {
-		console.log(separator);
 		let kv = strsplit(line, separator, 2);
 		if(kv.length < 2)
 			return;
@@ -73,11 +72,16 @@ export function parse_descriptor(string_contents: string, relative_root: string,
 				author = dedup_field(author, value, "Author");
 				break;
 
-			case "Date":
-				date = dedup_field(date, moment(value, util.RFC3339_FORMAT), "Date");
+			case "Date": {
+				let dt = moment(value, util.RFC3339_FORMAT);
+				if(free_date && !dt.isValid())
+					dt = moment(value);
+
+				date = dedup_field(date, dt, "Date");
 				if(!date.isValid())
-					throw new BookError(`Date value "${value}" not valid RFC3339`);
-				break;
+					throw new BookError(`Date value "${value}" not valid RFC3339${
+						free_date ? ", nor any ISO8601 format, nor RFC2822, nor any format supported by Date" : ""}`);
+			} break;
 
 			case "Language":
 				language = dedup_field(language, bcp47.parse(value, {warning: (reason: string, code: number, offset: number) => {

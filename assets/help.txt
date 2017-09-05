@@ -1,5 +1,5 @@
 USAGE:
-   gen-epub-book <input file> <output file> [--separator <sep>]
+   gen-epub-book <input file> <output file> [-S/--separator <sep>] [-D/--free-date]
 
 Where:
 
@@ -9,10 +9,13 @@ Where:
    <output file>
      (required) File to write the book to
 
-   [--separator <sep>]
+   [-S/--separator <sep>]
      Use sep as key/value separator.
 
      Default: ":"
+
+   [-D/--free-date]
+     Try to parse non-RFC3339 date formats.
 
 epubify -- generate an ePub book from a simple plaintext descriptor
            https://nabijaczleweli.xyz/content/gen-epub-book
