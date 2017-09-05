@@ -31,7 +31,7 @@ const fs = require("fs");
 
 
 const config = new epubify.Configuration(process.argv.slice(2));
-if(process.exitCode)
+if(process.exitCode !== undefined)
 	process.exit();
 mkdirp.sync(path.dirname(config.out_file));
 

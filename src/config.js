@@ -23,6 +23,8 @@
 
 
 const path = require("path");
+const minimist = require("minimist");
+const package_data = require("../package.json");
 
 import {file_exists} from "./util";
 
@@ -48,14 +50,34 @@ export class Configuration {
 		* @param out `(Console)` where to print errors/help should any occur
 		*/
 	constructor(argv: string[], out = console) {
-		if(argv.length != 2 || !file_exists(argv[0])) {
+		let pargv = minimist(argv, {
+			boolean: ["version", "help"],
+			alias: {
+				v: "version",
+				h: "help",
+			}
+		});
+
+		if(pargv.help) {
+			print_help(false, out);
+			process.exitCode = 0;
+			return;
+		}
+
+		if(pargv.version) {
+			out.log("epubify", package_data.version);
+			process.exitCode = 0;
+			return;
+		}
+
+		if(pargv._.length !== 2 || !file_exists(pargv._[0])) {
 			print_help(true, out);
 			process.exitCode = 1;
 			return;
 		}
 
-		this.in_file = argv[0];
-		this.out_file = argv[1];
+		this.in_file = pargv._[0];
+		this.out_file = pargv._[1];
 		this.rel_root = path.dirname(this.in_file);
 	}
 }
