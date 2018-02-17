@@ -28,6 +28,11 @@ import type {URL} from "url";
 
 export type ContentType = "local" | "remote" | "string";
 
+export type UnnamedContent = {
+	data: string | URL;
+	type: ContentType;
+};
+
 export type Content = {
 	id: string;
 	packed_path: string;
@@ -44,6 +49,7 @@ export class Book {
 	language: Object;
 
 	cover: ?Content;
+	description: ?UnnamedContent;
 	contents: Content[];
 	additives: Content[];
 }

@@ -53,6 +53,7 @@ export function parse_descriptor(string_contents: string, relative_root: string,
 	let date: ?Moment = null;
 	let language: ?Object = null;
 	let cover: ?book.Content = null;
+	let description: ?book.UnnamedContent = null;
 	let contents: book.Content[] = [];
 	let additives: book.Content[] = [];
 
@@ -181,6 +182,29 @@ export function parse_descriptor(string_contents: string, relative_root: string,
 					type: "remote",
 				});
 			} break;
+
+			case "Description":
+				if(!util.file_exists(rel_path))
+					throw new BookError(`Description path "${rel_path}" nonexistant`);
+				description = dedup_field(description, {
+					data: rel_path,
+					type: "local",
+				}, "Description, String-Description, or Network-Description");
+				break;
+
+			case "String-Description":
+				description = dedup_field(description, {
+					data: value,
+					type: "string",
+				}, "Description, String-Description, or Network-Description");
+				break;
+
+			case "Network-Description":
+				description = dedup_field(description, {
+					data: new URL(value),
+					type: "remote",
+				}, "Description, String-Description, or Network-Description");
+				break;
 		}
 	});
 
@@ -197,6 +221,7 @@ export function parse_descriptor(string_contents: string, relative_root: string,
 		language: language,
 
 		cover: cover,
+		description: description,
 		contents: contents,
 		additives: additives,
 	};
@@ -226,54 +251,63 @@ function missing_field<T>(val: ?T, name: string) {
 		throw new BookError(`Missing required key ${name}`);
 }
 
-function content_opf_s(buk: book.Book): string {
-	let cover: string = "";
-	if(buk.cover)
-		cover = `\t\t<meta name=\"cover\" content=\"${buk.cover.id}\" />\n`;
+function content_opf_s(buk: book.Book): Promise<string> {
+	let description: Promise<string>;
+		if(!buk.description)
+			description = Promise.resolve("");
+		else
+			description = Promise.resolve(add_element(buk.description)).then(_ => "\t\t<dc:description>\n" + _ + "\t\t</dc:description>\n");
 
-	let specified_ids: Set<string> = new Set();
-	let specify_item = (ctnt: book.Content) => {
-		if(specified_ids.has(ctnt.id))
-			return;
-		specified_ids.add(ctnt.id);
+	return description.then((description: string) => {
+		let cover: string = "";
+		if(buk.cover)
+			cover = `\t\t<meta name=\"cover\" content=\"${buk.cover.id}\" />\n`;
 
-		return `\t\t<item href=\"${ctnt.packed_path}\" id=\"${ctnt.id}\" media-type=\"${util.get_mime_for(ctnt.packed_path)}\" />\n`;
-	};
+		let specified_ids: Set<string> = new Set();
+		let specify_item = (ctnt: book.Content) => {
+			if(specified_ids.has(ctnt.id))
+				return;
+			specified_ids.add(ctnt.id);
 
-	let content: string = "";
-	if(buk.cover)
-		content = specify_item(buk.cover);
-	content = buk.additives.reduce((acc, el) => acc + specify_item(el),
-		        buk.contents.reduce((acc, el) => acc + specify_item(el),
-		        content));
+			return `\t\t<item href=\"${ctnt.packed_path}\" id=\"${ctnt.id}\" media-type=\"${util.get_mime_for(ctnt.packed_path)}\" />\n`;
+		};
 
-	let toclist: string = buk.contents.reduce((acc, el) => {
-		return acc + `\t\t<itemref idref=\"${el.id}\" />\n`;
-	}, "");
+		let content: string = "";
+		if(buk.cover)
+			content = specify_item(buk.cover);
+		content = buk.additives.reduce((acc, el) => acc + specify_item(el),
+			        buk.contents.reduce((acc, el) => acc + specify_item(el),
+			        content));
 
-	let cover_guide: string = "";
-	if(buk.cover)
-		cover_guide = `\t\t<reference xmlns=\"http://www.idpf.org/2007/opf\" href=\"${buk.cover.packed_path}\" title=\"${buk.cover.id}\" type=\"cover\" />\n`;
+		let toclist: string = buk.contents.reduce((acc, el) => {
+			return acc + `\t\t<itemref idref=\"${el.id}\" />\n`;
+		}, "");
 
-	return "$${include(content.opf.header)}" +                                                   //
-	       `\t\t<dc:title>${buk.name}</dc:title>\n` +                                            //
-	       `\t\t<dc:creator opf:role=\"aut\">${buk.author}</dc:creator>\n` +                     //
-	       `\t\t<dc:identifier id=\"uuid\" opf:scheme=\"uuid\">${buk.uuid}</dc:identifier>\n` +  //
-	       `\t\t<dc:date>${buk.date.format(util.RFC3339_FORMAT)}</dc:date>\n` +                  //
-	       cover +                                                                               //
-	       `\t</metadata>\n` +                                                                   //
-	       `\t<manifest>\n` +                                                                    //
-	       "$${include(content.opf.manifest-toc-line)}" +                                        //
-	       content +                                                                             //
-	       "\t</manifest>\n" +                                                                   //
-	       "\t<spine toc=\"toc\">\n" +                                                           //
-	       toclist +                                                                             //
-	       "\t</spine>\n" +                                                                      //
-	       "\t<guide>\n" +                                                                       //
-	       cover_guide +                                                                         //
-	       "$${include(content.opf.guide-toc-line)}" +                                           //
-	       "\t</guide>\n" +                                                                      //
-	       "</package>\n";
+		let cover_guide: string = "";
+		if(buk.cover)
+			cover_guide = `\t\t<reference xmlns=\"http://www.idpf.org/2007/opf\" href=\"${buk.cover.packed_path}\" title=\"${buk.cover.id}\" type=\"cover\" />\n`;
+
+		return "$${include(content.opf.header)}" +                                                   //
+		       `\t\t<dc:title>${buk.name}</dc:title>\n` +                                            //
+		       `\t\t<dc:creator opf:role=\"aut\">${buk.author}</dc:creator>\n` +                     //
+		       `\t\t<dc:identifier id=\"uuid\" opf:scheme=\"uuid\">${buk.uuid}</dc:identifier>\n` +  //
+		       `\t\t<dc:date>${buk.date.format(util.RFC3339_FORMAT)}</dc:date>\n` +                  //
+		       cover +                                                                               //
+		       description +                                                                         //
+		       `\t</metadata>\n` +                                                                   //
+		       `\t<manifest>\n` +                                                                    //
+		       "$${include(content.opf.manifest-toc-line)}" +                                        //
+		       content +                                                                             //
+		       "\t</manifest>\n" +                                                                   //
+		       "\t<spine toc=\"toc\">\n" +                                                           //
+		       toclist +                                                                             //
+		       "\t</spine>\n" +                                                                      //
+		       "\t<guide>\n" +                                                                       //
+		       cover_guide +                                                                         //
+		       "$${include(content.opf.guide-toc-line)}" +                                           //
+		       "\t</guide>\n" +                                                                      //
+		       "</package>\n";
+	});
 }
 
 function toc_ncx_s(buk: book.Book): Promise<string> {
@@ -330,7 +364,7 @@ function add_elements(buk: book.Book, zip: JSZip) {
 	buk.additives.forEach(maybe_add_element);
 }
 
-function add_element(ctnt: book.Content) {
+function add_element(ctnt: book.Content | book.UnnamedContent) {
 	switch(ctnt.type) {
 		case "local":
 			return new Promise((resolve, reject) => {
