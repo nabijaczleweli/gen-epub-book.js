@@ -112,7 +112,7 @@ describe("util", () => {
 	describe("#url_id()", () => {
 		it("picks last segment and correctly processes extensions", () => {
 			assert.equal(url_id(new URL("http://i.imgur.com/ViQ2WED.jpg")), "ViQ2WED_jpg");
-			assert.equal(url_id(new URL("https://cdn.rawgit.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png")),
+			assert.equal(url_id(new URL("https://rawcdn.githack.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png")),
 			             "slim_shady_png");
 			assert.equal(url_id(new URL("https://img09.deviantart.net/e6c8/i/2015/138/8/0/the_pursuer_by_artsed-d7lbiua.jpg")),
 			             "the_pursuer_by_artsed-d7lbiua_jpg");
@@ -124,7 +124,7 @@ describe("util", () => {
 	describe("#url_packed_path()", () => {
 		it("picks last segment and correctly processes extensions", () => {
 			assert.equal(url_packed_path(new URL("http://i.imgur.com/ViQ2WED.jpg")), "ViQ2WED.jpg");
-			assert.equal(url_packed_path(new URL("https://cdn.rawgit.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png")),
+			assert.equal(url_packed_path(new URL("https://rawcdn.githack.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png")),
 			             "slim_shady.png");
 			assert.equal(url_packed_path(new URL("https://img09.deviantart.net/e6c8/i/2015/138/8/0/the_pursuer_by_artsed-d7lbiua.jpg")),
 				           "the_pursuer_by_artsed-d7lbiua.jpg");

@@ -39,7 +39,7 @@ Content \t: simple/ctnt.html \t\t  \n\
 String-Content: <strong>SEIZE THE MEANS OF PRODUCTION!</strong>\n\
 Image-Content: simple/chapter_image.png\n\
 Image-Content: not_dead_yet.png\n\
-Network-Image-Content: https://cdn.rawgit.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png\n\
+Network-Image-Content: https://rawcdn.githack.com/nabijaczleweli/nabijaczleweli.github.io/dev/src/writing_prompts/slim_shady.png\n\
 \n\
 Network-Cover: http://i.imgur.com/ViQ2WED.jpg\n\
 \n\
