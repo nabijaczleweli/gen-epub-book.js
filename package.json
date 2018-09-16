@@ -27,7 +27,7 @@
 		"jszip": "3.1",
 		"bcp-47": "1.0",
 		"mkdirp": "0.5",
-		"moment": "2.18",
+		"moment": "2.19",
 		"request": "2.81",
 		"minimist": "1.2",
 		"strsplit": "1.0",
